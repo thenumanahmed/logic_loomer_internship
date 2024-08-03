@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "143162387248",
+    "project_id": "logic-loomer-fb-login",
+    "storage_bucket": "logic-loomer-fb-login.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:143162387248:android:7952afe425f74a826db6f5",
+        "android_client_info": {
+          "package_name": "com.example.internship_task"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAr8gbSmc9qLaR4xtv9XBC2nDWW3O3APMM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

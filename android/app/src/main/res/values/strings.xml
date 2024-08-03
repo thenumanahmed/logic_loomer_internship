@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="app_name">"Logic_Loomer"</string>
+<string name="facebook_app_id">804694485141141</string>
+<string name="fb_login_protocol_scheme">fb804694485141141</string>
+<string name="facebook_client_token">3f01fc98d53ae611ab227739598c02de</string>
+</resources>
