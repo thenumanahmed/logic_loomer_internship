@@ -1,103 +1,63 @@
-import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:internship_task/otp_screen.dart';
 
-import 'controllers/login_controller.dart';
-
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginScreenState extends State<LoginScreen> {
+  TextEditingController phoneNoController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Login App"),
+        title: const Text("OTP Verify"),
         centerTitle: true,
-        backgroundColor: Colors.redAccent,
       ),
-
-      // body of our ui
-
-      body: loginUI(),
-    );
-  }
-
-  // creating a function loginUI
-
-  loginUI() {
-    // loggedINUI
-    // loginControllers
-
-    return Consumer<LoginController>(builder: (context, model, child) {
-      // if we are already logged in
-      if (model.userDetails != null) {
-        return Center(
-          child: loggedInUI(model),
-        );
-      } else {
-        return loginControllers(context);
-      }
-    });
-  }
-
-  loggedInUI(LoginController model) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-
-      // our ui will have 3 children, name, email, photo , logout button
-
-      children: [
-        CircleAvatar(
-          backgroundImage:
-              Image.network(model.userDetails!.photoURL ?? "").image,
-          radius: 50,
-        ),
-
-        Text(model.userDetails!.displayName ?? ""),
-        Text(model.userDetails!.email ?? ""),
-
-        // logout
-        ActionChip(
-            avatar: Icon(Icons.logout),
-            label: Text("Logout"),
-            onPressed: () {
-              Provider.of<LoginController>(context, listen: false).logout();
-            })
-      ],
-    );
-  }
-
-  loginControllers(BuildContext context) {
-    return Center(
-      child: Column(
+      body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          GestureDetector(
-              child: Image.asset(
-                "assets/google.png",
-                width: 240,
-              ),
-              onTap: () {
-                Provider.of<LoginController>(context, listen: false)
-                    .googleLogin();
-              }),
-          SizedBox(
-            height: 10,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: TextField(
+              controller: phoneNoController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                  hintText: "+92300000000",
+                  suffixIcon: const Icon(
+                    Icons.phone,
+                  ),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(24))),
+            ),
           ),
-          GestureDetector(
-              child: Image.asset(
-                "assets/fb.png",
-                width: 240,
-              ),
-              onTap: () {
-                Provider.of<LoginController>(context, listen: false)
-                    .facebooklogin();
-              }),
+          const SizedBox(height: 30),
+          ElevatedButton(
+            onPressed: () async {
+              await FirebaseAuth.instance.verifyPhoneNumber(
+                verificationCompleted: (PhoneAuthCredential credential) {},
+                verificationFailed: (FirebaseAuthException ex) {},
+                codeSent: (String verificationId, int? resend) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => OtpScreen(
+                        verficationId: verificationId,
+                      ),
+                    ),
+                  );
+                },
+                codeAutoRetrievalTimeout: (String verificationId) {},
+                phoneNumber: phoneNoController.text.toString(),
+              );
+            },
+            child: const Text("Verify Phone Number"),
+          )
         ],
       ),
     );
